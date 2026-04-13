@@ -30,7 +30,7 @@ Tests → Application + Domain
 
 | 工具 | 版本 |
 |------|------|
-| .NET SDK | 8.x |
+| .NET SDK | 10.x |
 | SQL Server | 2019+ 或 Express / LocalDB |
 | Visual Studio | 2022 |
 
