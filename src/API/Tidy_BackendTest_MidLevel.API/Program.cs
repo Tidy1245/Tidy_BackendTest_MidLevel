@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.OpenApi.Models;
+using Tidy_BackendTest_MidLevel.API.Middleware;
 using Tidy_BackendTest_MidLevel.Application.Services;
 using Tidy_BackendTest_MidLevel.Domain.Services;
 using Tidy_BackendTest_MidLevel.Infrastructure;
@@ -11,6 +12,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 // Application Services
 builder.Services.AddScoped<MyOfficeAcpdService>();
+builder.Services.AddScoped<TenantService>();
 
 // Domain Services
 builder.Services.AddSingleton<SidGeneratorService>();
@@ -63,6 +65,7 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
+app.UseMiddleware<TenantMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 

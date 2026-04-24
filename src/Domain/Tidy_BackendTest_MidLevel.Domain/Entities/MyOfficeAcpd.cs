@@ -2,6 +2,7 @@ namespace Tidy_BackendTest_MidLevel.Domain.Entities;
 
 public class MyOfficeAcpd
 {
+    public string TenantId { get; set; } = string.Empty;
     public string ACPD_SID { get; set; } = string.Empty;
     public string? ACPD_Cname { get; set; }
     public string? ACPD_Ename { get; set; }

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tidy BackendTest — 系統總覽</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --secondary: #7c3aed;
+      --secondary-light: #ede9fe;
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,.13);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.6;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 45%, #7c3aed 100%);
+      color: #fff;
+      padding: 72px 32px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 999px;
+      padding: 4px 16px;
+      font-size: 13px;
+      letter-spacing: .5px;
+      margin-bottom: 20px;
+    }
+    .hero h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; }
+    .hero p  { font-size: 18px; opacity: .85; max-width: 640px; margin: 0 auto 32px; }
+    .hero-tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .hero-tag {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 6px;
+      padding: 5px 14px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* ── Layout ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 64px 0; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      margin-bottom: 12px;
+    }
+    .section-title { font-size: 30px; font-weight: 800; color: var(--gray-900); margin-bottom: 8px; }
+    .section-sub  { font-size: 15px; color: #6b7280; margin-bottom: 40px; }
+
+    /* ── Cards ── */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .card-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--gray-900); }
+    .card p  { font-size: 14px; color: #6b7280; line-height: 1.65; }
+    .card ul { padding-left: 16px; font-size: 14px; color: #6b7280; line-height: 1.9; }
+
+    /* ── Architecture ── */
+    .arch-wrap {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    .arch-flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      position: relative;
+    }
+    /* layer row */
+    .arch-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+    .arch-box {
+      border-radius: 10px;
+      padding: 14px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      min-width: 140px;
+      position: relative;
+    }
+    .arch-box small { display: block; font-size: 11px; font-weight: 400; margin-top: 3px; opacity: .75; }
+    /* layer colours */
+    .layer-api   { background: #dbeafe; border: 2px solid #2563eb; color: #1e40af; }
+    .layer-app   { background: #ede9fe; border: 2px solid #7c3aed; color: #5b21b6; }
+    .layer-infra { background: #dcfce7; border: 2px solid #16a34a; color: #14532d; }
+    .layer-domain{ background: #fef3c7; border: 2px solid #d97706; color: #92400e; }
+    .layer-db    { background: #fee2e2; border: 2px solid #dc2626; color: #7f1d1d; }
+    .layer-mid   { background: #f0fdf4; border: 2px solid #22c55e; color: #166534; }
+    /* arrow */
+    .arch-arrow {
+      font-size: 26px;
+      color: #9ca3af;
+      line-height: 1;
+      margin: 2px 0;
+    }
+    .arch-divider {
+      width: 100%;
+      border: none;
+      border-top: 1px dashed var(--gray-200);
+      margin: 20px 0;
+    }
+    /* legend */
+    .arch-legend {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      margin-top: 28px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; color: var(--gray-700);
+    }
+    .legend-dot {
+      width: 12px; height: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    /* ── Tenant flow ── */
+    .flow-wrap {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    .flow-steps {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+    .flow-step {
+      background: var(--gray-100);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      flex: 1 1 140px;
+      border: 2px solid transparent;
+    }
+    .flow-step small { display: block; font-size: 11px; font-weight: 400; color: #6b7280; margin-top: 3px; }
+    .flow-step.s1 { background: #dbeafe; border-color: #2563eb; color: #1e40af; }
+    .flow-step.s2 { background: #fce7f3; border-color: #ec4899; color: #831843; }
+    .flow-step.s3 { background: #ede9fe; border-color: #7c3aed; color: #4c1d95; }
+    .flow-step.s4 { background: #dcfce7; border-color: #16a34a; color: #14532d; }
+    .flow-step.s5 { background: #fef3c7; border-color: #d97706; color: #78350f; }
+    .flow-arrow { font-size: 22px; color: #9ca3af; padding: 0 6px; flex-shrink: 0; }
+
+    /* ── API Table ── */
+    .api-table-wrap {
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: linear-gradient(90deg, #1e3a8a, #2563eb); color: #fff; }
+    thead th { padding: 14px 18px; font-size: 13px; font-weight: 700; text-align: left; letter-spacing: .3px; }
+    tbody tr { border-bottom: 1px solid var(--gray-100); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gray-50); }
+    tbody td { padding: 13px 18px; font-size: 13.5px; vertical-align: middle; }
+    .method {
+      display: inline-block;
+      border-radius: 5px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .5px;
+    }
+    .m-get    { background: #dbeafe; color: #1e40af; }
+    .m-post   { background: #dcfce7; color: #14532d; }
+    .m-put    { background: #fef3c7; color: #92400e; }
+    .m-delete { background: #fee2e2; color: #991b1b; }
+    .code { font-family: 'Cascadia Code', 'Fira Code', monospace; background: var(--gray-100); padding: 2px 7px; border-radius: 4px; font-size: 12.5px; }
+    .badge {
+      display: inline-block;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-left: 3px;
+    }
+    .b-new  { background: #dcfce7; color: #14532d; }
+    .b-hdr  { background: #fce7f3; color: #831843; }
+
+    /* ── Stats ── */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+    .stat-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    .stat-num { font-size: 42px; font-weight: 900; background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+    .stat-label { font-size: 13px; color: #6b7280; margin-top: 6px; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--gray-900);
+      color: #9ca3af;
+      text-align: center;
+      padding: 28px;
+      font-size: 13px;
+    }
+    footer strong { color: #e5e7eb; }
+
+    @media (max-width: 640px) {
+      .flow-steps { flex-direction: column; align-items: stretch; }
+      .flow-arrow  { transform: rotate(90deg); align-self: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ HERO ══════════════ -->
+<div class="hero">
+  <div class="hero-badge">後端技術測試 · MidLevel</div>
+  <h1>Tidy BackendTest<br/>多租戶 Web API</h1>
+  <p>以 .NET 10 + EF Core + DDD/TDD 架構實作的企業級多租戶後端系統，包含完整 CRUD、租戶隔離與自動化測試。</p>
+  <div class="hero-tags">
+    <span class="hero-tag">.NET 10</span>
+    <span class="hero-tag">ASP.NET Core</span>
+    <span class="hero-tag">Entity Framework Core 9</span>
+    <span class="hero-tag">SQL Server</span>
+    <span class="hero-tag">DDD / TDD</span>
+    <span class="hero-tag">xUnit + Moq</span>
+    <span class="hero-tag">Swagger</span>
+  </div>
+</div>
+
+<!-- ══════════════ STATS ══════════════ -->
+<section style="padding: 48px 0 0;">
+  <div class="container">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-num">4</div>
+        <div class="stat-label">DDD 分層架構</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">10</div>
+        <div class="stat-label">REST API 端點</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">37</div>
+        <div class="stat-label">單元測試全數通過</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Build 錯誤 / 警告</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">17</div>
+        <div class="stat-label">多租戶新增/修改檔案</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FEATURES ══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">✦ 核心功能</div>
+    <h2 class="section-title">系統具備哪些能力？</h2>
+    <p class="section-sub">從資料庫隔離到自動化測試，每個環節都遵循最佳實踐。</p>
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-icon" style="background:#dbeafe;">🏢</div>
+        <h3>多租戶隔離（Shared DB）</h3>
+        <p>共享資料庫 + EF Core Global Query Filter，查詢自動附加 <code>WHERE TenantId = ?</code>，應用層完全透明。</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon" style="background:#ede9fe;">👤</div>
+        <h3>人員帳號 CRUD</h3>
+        <ul>
+          <li>查詢 / 單筆查詢</li>
+          <li>新增（SID 自動產生）</li>
+          <li>部分更新（Patch 語意）</li>
+          <li>刪除</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-icon" style="background:#dcfce7;">🔑</div>
+        <h3>自訂 SID 產生器</h3>
+        <p>20 字元唯一識別碼：<br/>
+        <code>[年份2碼][天序3碼][秒數5碼][亂數10碼]</code><br/>
+        支援碰撞重試（最多 3 次），可完整單元測試。</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon" style="background:#fef3c7;">🔒</div>
+        <h3>Tenant Middleware</h3>
+        <p>讀取 <code>X-Tenant-Id</code> HTTP Header，注入 Scoped 的 <code>ITenantContext</code>，再由 DbContext 自動套用篩選器。</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon" style="background:#fee2e2;">🧪</div>
+        <h3>TDD + 全覆蓋測試</h3>
+        <ul>
+          <li>SidGeneratorService — 8 tests</li>
+          <li>MyOfficeAcpdService — 12 tests</li>
+          <li>TenantService — 12 tests</li>
+          <li>SidGeneratorServiceTests — 5 tests</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-icon" style="background:#f0fdf4;">📖</div>
+        <h3>Swagger / OpenAPI</h3>
+        <p>完整 XML 文件注釋，所有端點含範例 Request / Response，開發 / 測試環境皆啟用。</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ ARCHITECTURE ══════════════ -->
+<section style="background: var(--gray-100);">
+  <div class="container">
+    <div class="section-label">✦ 系統架構</div>
+    <h2 class="section-title">DDD 四層架構</h2>
+    <p class="section-sub">各層職責明確，相依方向由外向內單向流動。</p>
+
+    <div class="arch-wrap">
+      <div class="arch-flow">
+
+        <!-- API -->
+        <div class="arch-row">
+          <div class="arch-box layer-api" style="min-width:200px;">
+            🌐 API 層
+            <small>Controllers · Middleware · Program.cs · Swagger</small>
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+
+        <!-- Application -->
+        <div class="arch-row">
+          <div class="arch-box layer-app" style="min-width:200px;">
+            ⚙️ Application 層
+            <small>Services · DTOs · Interfaces (Repository / TenantContext)</small>
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+
+        <!-- Domain + Infra side by side -->
+        <div class="arch-row" style="align-items:stretch; gap:20px; width:100%;">
+          <div class="arch-box layer-domain" style="flex:1;">
+            🧩 Domain 層
+            <small>Entities · Enums · SidGeneratorService</small>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:#9ca3af;font-size:13px;gap:4px;">
+            <span>←─ 依賴 ─→</span>
+          </div>
+          <div class="arch-box layer-infra" style="flex:1;">
+            🛠 Infrastructure 層
+            <small>AppDbContext · Repositories · DependencyInjection · TenantContext</small>
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+
+        <!-- DB -->
+        <div class="arch-row">
+          <div class="arch-box layer-db" style="min-width:220px;">
+            🗄 SQL Server
+            <small>MyOffice_ACPD（TenantId FK）· Tenants</small>
+          </div>
+        </div>
+
+        <hr class="arch-divider" />
+
+        <!-- Legend -->
+        <div class="arch-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#2563eb;"></div>API 層 — 對外介面</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#7c3aed;"></div>Application 層 — 業務協調</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#d97706;"></div>Domain 層 — 核心規則（無外部依賴）</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#16a34a;"></div>Infrastructure 層 — 資料存取實作</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#dc2626;"></div>資料庫 — SQL Server</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TENANT FLOW ══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">✦ 租戶隔離機制</div>
+    <h2 class="section-title">每筆請求的租戶解析流程</h2>
+    <p class="section-sub">從 HTTP Header 到資料庫 WHERE 條件，全程自動化，Repository 層零感知。</p>
+
+    <div class="flow-wrap">
+      <div class="flow-steps">
+        <div class="flow-step s1">
+          📩 HTTP Request
+          <small>X-Tenant-Id: T001</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step s2">
+          🔀 TenantMiddleware
+          <small>讀取 Header，設定 ITenantContext.TenantId</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step s3">
+          ⚙️ Application Service
+          <small>呼叫 Repository，不需帶 TenantId 參數</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step s4">
+          🛡 AppDbContext
+          <small>HasQueryFilter 自動附加 WHERE TenantId = 'T001'</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step s5">
+          🗄 SQL Server
+          <small>只回傳屬於 T001 的資料列</small>
+        </div>
+      </div>
+
+      <div style="margin-top:28px; padding:16px 20px; background:var(--gray-50); border-radius:8px; border-left:4px solid #2563eb;">
+        <strong style="color:#1e40af; font-size:13px;">💡 關鍵設計</strong>
+        <p style="font-size:13px; color:#374151; margin-top:6px; line-height:1.7;">
+          <code>ITenantContext</code> 以 <strong>Scoped</strong> 生命週期注入 <code>AppDbContext</code>。
+          EF Core 的 <code>HasQueryFilter()</code> 在 <code>OnModelCreating</code> 時以 lambda 捕捉 <code>_tenantContext</code> 引用，
+          每次查詢執行時動態讀取當前 TenantId，實現零侵入式隔離。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ API ENDPOINTS ══════════════ -->
+<section style="background: var(--gray-100);">
+  <div class="container">
+    <div class="section-label">✦ API 端點</div>
+    <h2 class="section-title">所有 REST 端點一覽</h2>
+    <p class="section-sub">
+      <span class="badge b-new">NEW</span> 標示本次新增端點；
+      <span class="badge b-hdr">需 Header</span> 表示須帶 <code>X-Tenant-Id</code>。
+    </p>
+
+    <div class="api-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>URL</th>
+            <th>說明</th>
+            <th>回應碼</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="method m-get">GET</span></td>
+            <td><code class="code">/api/tenants</code> <span class="badge b-new">NEW</span></td>
+            <td>查詢所有租戶</td>
+            <td>200</td>
+          </tr>
+          <tr>
+            <td><span class="method m-get">GET</span></td>
+            <td><code class="code">/api/tenants/{id}</code> <span class="badge b-new">NEW</span></td>
+            <td>依 TenantId 查詢單筆</td>
+            <td>200 / 404</td>
+          </tr>
+          <tr>
+            <td><span class="method m-post">POST</span></td>
+            <td><code class="code">/api/tenants</code> <span class="badge b-new">NEW</span></td>
+            <td>新增租戶（TenantId 自動產生）</td>
+            <td>201 / 400</td>
+          </tr>
+          <tr>
+            <td><span class="method m-put">PUT</span></td>
+            <td><code class="code">/api/tenants/{id}</code> <span class="badge b-new">NEW</span></td>
+            <td>更新租戶資訊（部分更新）</td>
+            <td>200 / 404</td>
+          </tr>
+          <tr>
+            <td><span class="method m-delete">DELETE</span></td>
+            <td><code class="code">/api/tenants/{id}</code> <span class="badge b-new">NEW</span></td>
+            <td>刪除租戶</td>
+            <td>204 / 404</td>
+          </tr>
+          <tr style="background:#fafafa;">
+            <td><span class="method m-get">GET</span></td>
+            <td><code class="code">/api/myofficeacpd</code> <span class="badge b-hdr">需 Header</span></td>
+            <td>查詢該租戶所有人員帳號</td>
+            <td>200</td>
+          </tr>
+          <tr style="background:#fafafa;">
+            <td><span class="method m-get">GET</span></td>
+            <td><code class="code">/api/myofficeacpd/{id}</code> <span class="badge b-hdr">需 Header</span></td>
+            <td>依 SID 查詢單筆（租戶範圍內）</td>
+            <td>200 / 404</td>
+          </tr>
+          <tr style="background:#fafafa;">
+            <td><span class="method m-post">POST</span></td>
+            <td><code class="code">/api/myofficeacpd</code> <span class="badge b-hdr">需 Header</span></td>
+            <td>新增人員帳號（自動綁定 TenantId）</td>
+            <td>201 / 400</td>
+          </tr>
+          <tr style="background:#fafafa;">
+            <td><span class="method m-put">PUT</span></td>
+            <td><code class="code">/api/myofficeacpd/{id}</code> <span class="badge b-hdr">需 Header</span></td>
+            <td>更新人員帳號（部分更新）</td>
+            <td>200 / 404</td>
+          </tr>
+          <tr style="background:#fafafa;">
+            <td><span class="method m-delete">DELETE</span></td>
+            <td><code class="code">/api/myofficeacpd/{id}</code> <span class="badge b-hdr">需 Header</span></td>
+            <td>刪除人員帳號</td>
+            <td>204 / 404</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ DATA MODEL ══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">✦ 資料模型</div>
+    <h2 class="section-title">Tenant 與 User 的關聯</h2>
+    <p class="section-sub">一個 Tenant 可以有多個 User（1 對多），TenantId 作為外鍵存在每筆 User 記錄中。</p>
+    <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+
+      <div class="card">
+        <div class="card-icon" style="background:#dbeafe;">🏢</div>
+        <h3>Tenant（租戶）<span class="badge b-new">NEW</span></h3>
+        <table style="width:100%; font-size:13px; border-collapse:collapse; margin-top:10px;">
+          <tr style="background:var(--gray-100);">
+            <td style="padding:6px 8px; font-weight:700; border-radius:4px;">TenantId</td>
+            <td style="padding:6px 8px; color:#6b7280;">char(20) · PK · 自動產生</td>
+          </tr>
+          <tr><td style="padding:6px 8px; font-weight:700;">Name</td><td style="padding:6px 8px; color:#6b7280;">nvarchar(100) · 必填</td></tr>
+          <tr style="background:var(--gray-100);">
+            <td style="padding:6px 8px; font-weight:700;">Domain</td>
+            <td style="padding:6px 8px; color:#6b7280;">nvarchar(200) · 域名</td>
+          </tr>
+          <tr><td style="padding:6px 8px; font-weight:700;">SubscriptionStatus</td><td style="padding:6px 8px; color:#6b7280;">tinyint · Trial / Active / Inactive</td></tr>
+          <tr style="background:var(--gray-100);">
+            <td style="padding:6px 8px; font-weight:700;">CreatedAt</td>
+            <td style="padding:6px 8px; color:#6b7280;">datetime · 建立時間</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-icon" style="background:#ede9fe;">👤</div>
+        <h3>MyOfficeAcpd（使用者）</h3>
+        <table style="width:100%; font-size:13px; border-collapse:collapse; margin-top:10px;">
+          <tr style="background:#fce7f3;">
+            <td style="padding:6px 8px; font-weight:700; border-radius:4px;">TenantId</td>
+            <td style="padding:6px 8px; color:#831843;">char(20) · FK → Tenant <span class="badge b-new">NEW</span></td>
+          </tr>
+          <tr style="background:var(--gray-100);">
+            <td style="padding:6px 8px; font-weight:700;">ACPD_SID</td>
+            <td style="padding:6px 8px; color:#6b7280;">char(20) · PK · 自動產生</td>
+          </tr>
+          <tr><td style="padding:6px 8px; font-weight:700;">ACPD_LoginID</td><td style="padding:6px 8px; color:#6b7280;">nvarchar(30) · 必填</td></tr>
+          <tr style="background:var(--gray-100);">
+            <td style="padding:6px 8px; font-weight:700;">ACPD_LoginPWD</td>
+            <td style="padding:6px 8px; color:#6b7280;">nvarchar(60) · 必填</td>
+          </tr>
+          <tr><td style="padding:6px 8px; font-weight:700;">ACPD_NowDateTime</td><td style="padding:6px 8px; color:#6b7280;">datetime · 稽核欄位</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <strong>Tidy BackendTest MidLevel</strong> — .NET 10 · EF Core 9 · SQL Server · DDD/TDD<br/>
+  <span style="font-size:12px; opacity:.7; margin-top:6px; display:block;">Build: 0 errors · Tests: 37/37 passed · 2026-04-24</span>
+</footer>
+
+</body>
+</html>

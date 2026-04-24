@@ -13,12 +13,15 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddScoped<ITenantContext, TenantContext>();
+
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection"),
                 sqlOptions => sqlOptions.EnableRetryOnFailure(3)));
 
         services.AddScoped<IMyOfficeAcpdRepository, MyOfficeAcpdRepository>();
+        services.AddScoped<ITenantRepository, TenantRepository>();
 
         return services;
     }
